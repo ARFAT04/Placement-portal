@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Company Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="card p-3 shadow mb-4">
+
+        <h5>Company Details</h5>
+
+        <p><strong>Name:</strong> {{ company[0] }}</p>
+        <p><strong>Email:</strong> {{ company[1] }}</p>
+        <p><strong>Status:</strong> {{ company[2] }}</p>
+
+    </div>
+
+    <div class="mb-3">
+        <a href="{{ url_for('create_drive') }}" class="btn btn-primary">
+            Create New Drive
+        </a>
+    </div>
+
+    <h4>Your Drives</h4>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Applicants</th>
+            <th>Action</th>
+        </tr>
+        
+        {% for d in drives %}
+        <tr>
+            <td>{{ d[1] }}</td>
+            <td>
+                {% if d[2]=='ACTIVE'%}
+                <span class="text-success">Active</span>
+
+                {% else %}
+                <span class="text-danger">Closed</span>
+                {% endif %}
+            </td>
+
+            <td>{{ d[3] }}</td>
+
+            <td>
+                {% if d[2]=='ACTIVE' %}
+
+                <form method="POST" action="{{ url_for('close_drive',drive_id=d[0] )}}" class="d-inline">
+                    <button class="btn btn-warning btn-sm">Close</button>
+                </form>
+
+                {% endif %}
+
+                <a href="{{ url_for('edit_drive', drive_id=d[0]) }}" class="btn btn-info btn-sm">
+                Edit
+                </a>
+
+                <form method="POST" action="{{ url_for('delete_drive', drive_id=d[0] )}}" class="d-inline" onsubmit="return confirm('Delete this drive?')">
+                    <button class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+
+            
+
+            
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="{{ url_for('view_applicants') }}" class="btn btn-success mt-3">
+        View Applicants
+    </a>
+</div>
+
+{% endblock %}

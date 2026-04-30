@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Student Details{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Student Details</h2>
+
+    <div class="card p-4 shadow">
+
+        <p><strong>Name:</strong> {{ student[1] }}</p>
+        <p><strong>Email:</strong> {{ student[2] }}</p>
+        <p><strong>Skills:</strong> {{ student[5] or "N/A" }}</p>
+        <p><strong>Education:</strong> {{ student[6] or "N/A" }}</p>
+        <p><strong>Resume:</strong> {{ student[7] or "N/A" }}</p>
+        <p><strong>Status:</strong> {{ student[8] }}</p>
+         
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mt-3">Back</a>
+
+    </div>
+</div>
+
+{% endblock %}

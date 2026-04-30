@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Company Details{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Company Details</h2>
+
+    <div class="card p-4 shadow">
+        <p><strong>Name:</strong> {{ company[1] }}</p>
+        <p><strong>Email:</strong> {{ company[2] }}</p>
+        <p><strong>Status:</strong> {{ company[4] }}</p>
+    
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mt-3">Back</a>
+
+    </div>
+</div>
+
+{% endblock %}

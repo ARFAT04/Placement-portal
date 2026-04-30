@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2 class="text-center mb-4">Dashboard</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card p-4 shadow text-center">
+
+                <h5 class="mb-3">Welcome, {{ session['user'] }} </h5>
+
+                <p class="text-muted mb-4">
+                    Role: <strong>{{ session['role'] }}</strong>
+                </p>
+
+                <a href="{{ url_for('logout') }}" class="btn btn-danger w-100">
+                    Logout
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

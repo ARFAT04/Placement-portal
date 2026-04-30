@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content%}
+
+
+
+<h2 class="text-center mb-4">Admin Dashboard</h2>
+
+<!-- SEARCH BAR-->
+<form method="GET" action="{{ url_for('dashboard') }}" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="search" class="form-control" placeholder="search student by name">
+        <button class="btn btn-primary">Search</button>
+    </div>
+</form>
+
+<!-- TOTAL INFORMATION -->
+<div class="row text-center mb-4">
+
+    <div class="col-md-3">
+        <div class="card p-3">
+            <h5>Total Students</h5>
+            <h3>{{ total_students }}</h3>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card p-3">
+            <h5>Total Companies</h5>
+            <h3>{{ total_companies }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3">
+            <h5>Total Drives</h5>
+            <h3>{{ total_drives }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3">
+            <h5>Total Applications</h5>
+            <h3>{{ total_applications }}</h3>
+        </div>
+    </div>
+</div>
+
+<!-- Students -->
+
+<h4>All Students</h4>
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Action</th>
+    </tr>
+
+    {% for student in students %}
+    <tr>
+        <td>{{ student[1] }}</td>
+        <td>{{ student[2] }}</td>
+        <td> 
+            <a href="{{ url_for('view_student',student_id=student[0])}}" class="d-inline">
+                <button class="btn btn-info btn-sm d-inline">View</button>
+            </a>
+
+            {% if student[8]=="blacklisted" %}
+            <form method="POST" action="{{ url_for('unblacklist_student',student_id=student[0]) }}">
+                <button class="btn btn-secondary btn-sm">Remove</button>
+            </form>  
+
+            {% else %}
+            <form method="POST" action="{{ url_for('blacklist_student',student_id=student[0]) }}">
+                <button class="btn btn-warning btn-sm">Blacklist</button>
+            </form>
+            {% endif %}
+
+            <form method="POST" action="{{ url_for('delete_student',student_id=student[0] )}}" class="d-inline"
+            onsubmit="return confirm('Are you sure you want to delete student?')">
+            <button class="btn btn-danger btn-sm">Delete</button>
+
+            </form>
+
+            
+
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h4>All Companies</h4>
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    {% for company in companies %}
+    <tr>
+        <td>{{ company[1] }}</td>
+        <td>{{ company[2] }}</td>
+        <td>{{ company[4] }}</td>
+        
+        <td>
+
+            <a href="{{ url_for('view_company',company_id=company[0]) }}" class="btn btn-info btn-sm d-inline">
+                View
+            </a>
+            {% if company[4]=="pending" %}
+
+            <form method="POST" action="{{ url_for('approve_company',company_id=company[0]) }}" class="d-inline">
+                <button class="btn btn-success btn-sm">Approve</button>
+            </form>
+
+            <form method="POST" action="{{ url_for('reject_company',company_id=company[0]) }}" class="d-inline">
+                <button class="btn btn-danger btn-sm">Reject</button>
+            </form>
+
+            {% elif company[4]=="approved" %}
+            <span class="text-success">Approved</span>
+
+            <form method="POST" action="{{ url_for('blacklist_company',company_id=company[0]) }}" class="d-inline">
+                <button class="btn btn-warning btn-sm">Blacklist</button>
+            </form>
+            
+            {% elif company[4]=="blacklisted" %}
+
+            <span class="text-danger">Blacklisted</span>
+
+            <form method="POST" action="{{ url_for('unblacklist_company',company_id=company[0]) }}" class="d-inline">
+                 <button class="btn btn-secondary btn-sm">Remove</button>
+            </form>
+
+            {% else %}
+                <span class="text-danger">Rejected</span>
+            
+            {% endif %}
+
+            <form method="POST" action="{{ url_for('delete_company',company_id=company[0] )}}" class="d-inline"
+            onsubmit="return confirm('Delete this company ')">
+             
+            <button class="btn btn-danger btn-sm">Delete</button>
+            </form>
+
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h4>All Drives</h4>
+<table class="table table-bordered">
+    <tr>
+        <th>Title</th>
+        <th>Company</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    {% for drive in drives %}
+    <tr>
+        <td>{{ drive[1] }}</td>
+        <td>{{ drive[2] }}</td>
+        <td>{{ drive[3] }}</td>
+
+        <td>
+            {% if drive[3]=="pending" %}
+            <form method="POST" action="{{ url_for('approve_drive',drive_id=drive[0] )}}" class="d-inline">
+                <button class="btn btn-success btn-sm">Approve</button>
+            </form>
+
+            <form method="POST" action="{{ url_for('reject_drive',drive_id=drive[0] )}}" class="d-inline">
+                <button class="btn btn-danger btn-sm">Reject</button>
+            </form>
+
+            {% elif drive[3]=="approved" %}
+            <span class="text-success">Approved</span>
+            {% else %}
+            <span class="text-danger">Rejected</span>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+<h4>All Applications</h4>
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>Student</th>
+        <th>Company</th>
+        <th>Drive</th>
+        <th>Status</th>
+    </tr>
+
+    {% for app in applications %}
+    <tr>
+        <td>{{ app[0] }}</td>
+        <td>{{ app[1] }}</td>
+        <td>{{ app[2] }}</td>
+        <td>
+            {% if app[3]|lower == "selected" %}
+                <span class="text-success fw-bold">Selected</span>
+            {% elif app[3]|lower == "shortlisted" %}
+                <span class="text-primary">Shortlisted</span>
+            {% elif app[3]|lower == "rejected" %}
+                <span class="text-danger">Rejected</span>
+            {% else %}
+                <span class="text-secondary">Applied</span>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

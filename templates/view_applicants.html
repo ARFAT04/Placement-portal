@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Applicants{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h2 class="text-center mb-4">Applicants</h2>
+
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Drive</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+
+        {% for app in applicants %}
+        <tr>
+            <td>{{ app[1] }}</td>
+            <td>{{ app[2] }}</td>
+            <td>{{ app[3] }}</td>
+            <td>{{ app[4] }}</td>
+
+            <td>
+
+                {% if app[4]|lower =="applied" %}
+
+                <form method="POST" action="{{url_for('shortlist',application_id=app[0] )}}" style="display: inline;">
+                    <button class="btn btn-success btn-sm">Shortlist</button>
+                </form>
+
+                <form method="POST" action="{{url_for('reject_application',application_id=app[0] )}}" style="display: inline;">
+                    <button class="btn btn-danger btn-sm">Reject</button>
+                </form>
+                
+                {% elif app[4]|lower =="shortlisted" %}
+                <span class="text-success">Shortlisted</span>
+                
+                <form method="POST" action="{{ url_for('selection_application',application_id=app[0] )}}" style="display:inline">
+                    <button class="btn btn-primary btn-sm">Select</button>
+                </form>
+
+                {% elif app[4]|lower=="selected"%}
+
+                <span class="text-primary">Selected</span>
+
+                {% else %}
+                <span class="text-danger">Rejected</span>
+                {% endif %}
+
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}
